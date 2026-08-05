@@ -657,12 +657,31 @@ st.markdown("""
     <p class="mockup-title">SEIA RAG — Explorador de expedientes ambientales</p>
     <p class="mockup-sub">Búsqueda semántica sobre RCAs, ICEs e ICSARAs del Sistema de Evaluación de Impacto Ambiental de Chile</p>
   </div>
-  <span class="mockup-badge">Portafolio · Fernando Barrera</span>
+  <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px; flex-shrink:0;">
+    <span class="mockup-badge">Portafolio · Fernando Barrera G.</span>
+    <span style="font-size:10px; color:#6b7280;">Data Scientist &nbsp;·&nbsp; LLM Engineer &nbsp;·&nbsp; RAG Specialist</span>
+    <a href="mailto:barrera.fdo@outlook.com" style="font-size:10px; color:#2563eb; text-decoration:none;">barrera.fdo@outlook.com</a>
+  </div>
+</div>
+""", unsafe_allow_html=True)
+
+# ── Descripción del problema que resuelve el sistema ──
+st.markdown("""
+<div style="background:#ffffff; border:1px solid #e5e7eb; border-left:4px solid #2563eb; border-radius:12px; padding:14px 18px; margin-bottom:16px; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+  <p style="font-size:12px; font-weight:700; color:#111827; margin:0 0 6px 0;">¿Qué problema resuelve este sistema?</p>
+  <p style="font-size:11.5px; color:#374151; line-height:1.7; margin:0;">
+    El Sistema de Evaluación de Impacto Ambiental (SEIA) de Chile genera miles de documentos técnicos —RCAs, ICEs e ICSARAs— que son
+    <strong>prácticamente inaccesibles para búsqueda y análisis</strong> sin herramientas especializadas. Este sistema implementa un
+    <strong>agente RAG (Retrieval-Augmented Generation)</strong> sobre un portafolio de <strong>91 megaproyectos mineros</strong>,
+    permitiendo consultas en lenguaje natural con respuestas contextualizadas y con fuentes citadas.
+    El agente clasifica automáticamente cada pregunta —específica, global o compuesta— y enruta la consulta
+    al motor de recuperación adecuado para maximizar precisión y cobertura.
+  </p>
 </div>
 """, unsafe_allow_html=True)
 
 # ── Definir Pestañas (Tabs) ──
-tab_demo, tab_eval = st.tabs(["Demo", "Evaluación del sistema"])
+tab_demo, tab_eval = st.tabs(["Demo", "Evaluación"])
 
 # ==============================================================================
 # TAB 1: DEMO (Buscador Real)
@@ -742,9 +761,10 @@ with tab_demo:
             )
             st.markdown(badge_html, unsafe_allow_html=True)
 
+    st.markdown('<p style="font-size: 10px; color: #3b82f6; font-weight: 600; margin-top: 10px; margin-bottom: 4px;">💡 También puedes escribir cualquier pregunta libre y personalizada en el campo de abajo — el agente la clasificará y responderá en tiempo real.</p>', unsafe_allow_html=True)
+
     # 3. SECCIÓN: Buscador e Interacción RAG
-    st.markdown('<p style="font-size: 11px; color: #6b7280; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 14px; margin-bottom: 2px;">3. Ejecutar Consulta</p>', unsafe_allow_html=True)
-    st.markdown('<p style="font-size: 10px; color: #3b82f6; font-weight: 600; margin-top: 0px; margin-bottom: 6px;">💡 ¡Puedes escribir cualquier pregunta libre y personalizada aquí abajo! El RAG Agent la clasificará y responderá en tiempo real.</p>', unsafe_allow_html=True)
+    st.markdown('<p style="font-size: 11px; color: #6b7280; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 10px; margin-bottom: 2px;">3. Ejecutar Consulta</p>', unsafe_allow_html=True)
 
     st.markdown("""
     <div style="background:#FFF8F0; border:0.5px solid #F5A623; border-radius:8px; padding:9px 13px; margin-bottom:10px; display:flex; align-items:flex-start; gap:8px;">
@@ -756,7 +776,7 @@ with tab_demo:
           para garantizar la máxima precisión y controlar los costos operacionales.
           Para preguntas complejas, formula cada una por separado.
           Si necesitas una solución con <strong>memoria conversacional completa</strong>,
-          contáctame directamente para discutirlo.
+          escríbeme a <a href="mailto:barrera.fdo@outlook.com" style="color:#92400e; font-weight:700;">barrera.fdo@outlook.com</a> para discutirlo.
         </p>
       </div>
     </div>
