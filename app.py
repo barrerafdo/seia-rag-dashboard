@@ -1283,18 +1283,26 @@ with tab_eval:
     </div>
     """, unsafe_allow_html=True)
 
-# ── Footer con badges de APIs ──
+# ── Footer con badges de APIs y Stack completo ──
 st.markdown("""
 <div class="app-footer">
   <span class="footer-left">Stack del Proyecto RAG</span>
   <div class="api-badges">
     <span class="api-badge badge-dss"><span class="api-badge-dot" style="background:#5a9e2f"></span>SEA API · Datos</span>
     <span class="footer-sep">·</span>
-    <span class="api-badge badge-oai"><span class="api-badge-dot" style="background:#888"></span>OpenAI · Embeddings</span>
+    <span class="api-badge badge-oai"><span class="api-badge-dot" style="background:#10a37f"></span>OpenAI · Embeddings</span>
     <span class="footer-sep">·</span>
     <span class="api-badge badge-qdr"><span class="api-badge-dot" style="background:#378ADD"></span>LanceDB · Vector DB</span>
     <span class="footer-sep">·</span>
-    <span class="api-badge badge-llm"><span class="api-badge-dot" style="background:#555"></span>GPT-4o / mini · Generación</span>
+    <span class="api-badge badge-llm"><span class="api-badge-dot" style="background:#555"></span>GPT-4o mini · Generación</span>
+    <span class="footer-sep">·</span>
+    <span class="api-badge badge-dss"><span class="api-badge-dot" style="background:#FF4B4B"></span>Streamlit · Frontend</span>
+    <span class="footer-sep">·</span>
+    <span class="api-badge badge-oai"><span class="api-badge-dot" style="background:#FFD21E"></span>Hugging Face · Dataset</span>
+    <span class="footer-sep">·</span>
+    <span class="api-badge badge-qdr"><span class="api-badge-dot" style="background:#1a1a1a"></span>GitHub · Repositorio</span>
+    <span class="footer-sep">·</span>
+    <span class="api-badge badge-llm"><span class="api-badge-dot" style="background:#FF4B4B"></span>Streamlit Cloud · Deploy</span>
   </div>
 </div>
 """, unsafe_allow_html=True)
