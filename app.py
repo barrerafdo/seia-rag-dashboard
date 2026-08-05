@@ -23,6 +23,8 @@ load_dotenv(dotenv_path=env_path, override=True)
 # Si no hay .env local (en la nube), inyectar la API Key desde st.secrets
 if not os.environ.get("OPENAI_API_KEY") and "OPENAI_API_KEY" in st.secrets:
     os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+if not os.environ.get("HF_TOKEN") and "HF_TOKEN" in st.secrets:
+    os.environ["HF_TOKEN"] = st.secrets["HF_TOKEN"]
 
 client = OpenAI()
 
