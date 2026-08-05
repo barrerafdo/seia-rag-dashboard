@@ -1,0 +1,7 @@
+# Ignorar la base de datos vectorial pesada
+lancedb_data.zip
+scraper/lancedb_data/
+.DS_Store
+.env
+__pycache__/
+*.pyc
