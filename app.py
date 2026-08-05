@@ -748,14 +748,15 @@ with tab_demo:
 
     st.markdown("""
     <div style="background:#FFF8F0; border:0.5px solid #F5A623; border-radius:8px; padding:9px 13px; margin-bottom:10px; display:flex; align-items:flex-start; gap:8px;">
-      <span style="font-size:14px; flex-shrink:0;">⚠️</span>
+      <span style="font-size:14px; flex-shrink:0;">💡</span>
       <div>
-        <p style="font-size:10.5px; color:#92400e; font-weight:600; margin:0 0 3px 0;">Este sistema no es un chatbot conversacional</p>
+        <p style="font-size:10.5px; color:#92400e; font-weight:600; margin:0 0 3px 0;">Optimizado para consultas directas y precisas</p>
         <p style="font-size:10px; color:#78350f; margin:0; line-height:1.6;">
-          Cada consulta se procesa de forma <strong>independiente y sin memoria de interacciones anteriores</strong>, por razones de costo operacional de la API.
-          Está optimizado para <strong>preguntas únicas y específicas</strong> sobre el portafolio de megaproyectos mineros del SEIA.
-          Si necesitas una solución con contexto conversacional completo,
-          <strong>contáctame directamente</strong> para discutir una implementación a medida.
+          Cada consulta se procesa de forma <strong>independiente</strong>, sin memoria de interacciones anteriores,
+          para garantizar la máxima precisión y controlar los costos operacionales.
+          Para preguntas complejas, formula cada una por separado.
+          Si necesitas una solución con <strong>memoria conversacional completa</strong>,
+          contáctame directamente para discutirlo.
         </p>
       </div>
     </div>
