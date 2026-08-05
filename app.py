@@ -1,4 +1,5 @@
 import sys
+import os
 import importlib
 import json
 import streamlit as st
@@ -14,9 +15,14 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Cargar variables de entorno
+# Cargar variables de entorno (local)
 env_path = Path(__file__).resolve().parent / ".env"
 load_dotenv(dotenv_path=env_path, override=True)
+
+# Compatibilidad con Streamlit Cloud Secrets
+# Si no hay .env local (en la nube), inyectar la API Key desde st.secrets
+if not os.environ.get("OPENAI_API_KEY") and "OPENAI_API_KEY" in st.secrets:
+    os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 
 client = OpenAI()
 
