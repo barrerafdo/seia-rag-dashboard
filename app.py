@@ -1288,21 +1288,21 @@ st.markdown("""
 <div class="app-footer">
   <span class="footer-left">Stack del Proyecto RAG</span>
   <div class="api-badges">
-    <span class="api-badge badge-dss"><span class="api-badge-dot" style="background:#5a9e2f"></span>SEA API · Datos</span>
-    <span class="footer-sep">·</span>
-    <span class="api-badge badge-oai"><span class="api-badge-dot" style="background:#10a37f"></span>OpenAI · Embeddings</span>
-    <span class="footer-sep">·</span>
-    <span class="api-badge badge-qdr"><span class="api-badge-dot" style="background:#378ADD"></span>LanceDB · Vector DB</span>
-    <span class="footer-sep">·</span>
-    <span class="api-badge badge-llm"><span class="api-badge-dot" style="background:#555"></span>GPT-4o mini · Generación</span>
-    <span class="footer-sep">·</span>
-    <span class="api-badge badge-dss"><span class="api-badge-dot" style="background:#FF4B4B"></span>Streamlit · Frontend</span>
-    <span class="footer-sep">·</span>
-    <span class="api-badge badge-oai"><span class="api-badge-dot" style="background:#FFD21E"></span>Hugging Face · Dataset</span>
-    <span class="footer-sep">·</span>
-    <span class="api-badge badge-qdr"><span class="api-badge-dot" style="background:#1a1a1a"></span>GitHub · Repositorio</span>
-    <span class="footer-sep">·</span>
-    <span class="api-badge badge-llm"><span class="api-badge-dot" style="background:#FF4B4B"></span>Streamlit Cloud · Deploy</span>
+    <span class="api-badge badge-dss"><span class="api-badge-dot" style="background:#5a9e2f"></span><b>SEA API</b>&nbsp;<span style="opacity:.55;font-weight:400;">Datos</span></span>
+    <span class="footer-sep">|</span>
+    <span class="api-badge badge-oai"><span class="api-badge-dot" style="background:#10a37f"></span><b>OpenAI</b>&nbsp;<span style="opacity:.55;font-weight:400;">Embeddings</span></span>
+    <span class="footer-sep">|</span>
+    <span class="api-badge badge-qdr"><span class="api-badge-dot" style="background:#378ADD"></span><b>LanceDB</b>&nbsp;<span style="opacity:.55;font-weight:400;">Retrieval</span></span>
+    <span class="footer-sep">|</span>
+    <span class="api-badge badge-llm"><span class="api-badge-dot" style="background:#555"></span><b>GPT-4o mini</b>&nbsp;<span style="opacity:.55;font-weight:400;">Generación</span></span>
+    <span class="footer-sep">|</span>
+    <span class="api-badge badge-dss"><span class="api-badge-dot" style="background:#FF4B4B"></span><b>Streamlit</b>&nbsp;<span style="opacity:.55;font-weight:400;">Frontend</span></span>
+    <span class="footer-sep">|</span>
+    <span class="api-badge badge-oai"><span class="api-badge-dot" style="background:#FFD21E"></span><b>Hugging Face</b>&nbsp;<span style="opacity:.55;font-weight:400;">Dataset</span></span>
+    <span class="footer-sep">|</span>
+    <span class="api-badge badge-qdr"><span class="api-badge-dot" style="background:#1a1a1a"></span><b>GitHub</b>&nbsp;<span style="opacity:.55;font-weight:400;">Repositorio</span></span>
+    <span class="footer-sep">|</span>
+    <span class="api-badge badge-llm"><span class="api-badge-dot" style="background:#FF4B4B"></span><b>Streamlit Cloud</b>&nbsp;<span style="opacity:.55;font-weight:400;">Deploy</span></span>
   </div>
 </div>
 """, unsafe_allow_html=True)
