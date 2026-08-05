@@ -744,8 +744,24 @@ with tab_demo:
 
     # 3. SECCIÓN: Buscador e Interacción RAG
     st.markdown('<p style="font-size: 11px; color: #6b7280; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 14px; margin-bottom: 2px;">3. Ejecutar Consulta</p>', unsafe_allow_html=True)
-    st.markdown('<p style="font-size: 10px; color: #3b82f6; font-weight: 600; margin-top: 0px; margin-bottom: 8px;">💡 ¡Puedes escribir cualquier pregunta libre y personalizada aquí abajo! El RAG Agent la clasificará y responderá en tiempo real.</p>', unsafe_allow_html=True)
-    
+    st.markdown('<p style="font-size: 10px; color: #3b82f6; font-weight: 600; margin-top: 0px; margin-bottom: 6px;">💡 ¡Puedes escribir cualquier pregunta libre y personalizada aquí abajo! El RAG Agent la clasificará y responderá en tiempo real.</p>', unsafe_allow_html=True)
+
+    st.markdown("""
+    <div style="background:#FFF8F0; border:0.5px solid #F5A623; border-radius:8px; padding:9px 13px; margin-bottom:10px; display:flex; align-items:flex-start; gap:8px;">
+      <span style="font-size:14px; flex-shrink:0;">⚠️</span>
+      <div>
+        <p style="font-size:10.5px; color:#92400e; font-weight:600; margin:0 0 3px 0;">Este sistema no es un chatbot conversacional</p>
+        <p style="font-size:10px; color:#78350f; margin:0; line-height:1.6;">
+          Cada consulta se procesa de forma <strong>independiente y sin memoria de interacciones anteriores</strong>, por razones de costo operacional de la API.
+          Está optimizado para <strong>preguntas únicas y específicas</strong> sobre el portafolio de megaproyectos mineros del SEIA.
+          Si necesitas una solución con contexto conversacional completo,
+          <strong>contáctame directamente</strong> para discutir una implementación a medida.
+        </p>
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+
     # Utilizar un st.form para evitar que se ejecute la búsqueda automáticamente en la primera carga
     with st.form("query_form", clear_on_submit=False):
         user_query = st.text_input(
