@@ -36,55 +36,38 @@ def check_and_download_db():
     db_dir = SCRAPER_DIR / "lancedb_data"
     if not db_dir.exists():
         st.info("📦 Base de datos de Megaproyectos Mineros no encontrada localmente.")
-        st.info("Descargando base de datos consolidada (~1.5 GB zip)... Esto solo ocurre la primera vez y tomará un momento.")
-        
-        progress_bar = st.progress(0)
         status_text = st.empty()
         
-        url = "https://huggingface.co/datasets/barrerafdo/seia-lancedb-dataset/resolve/main/lancedb_data.zip"
-        zip_path = SCRAPER_DIR / "lancedb_data.zip"
-        
         try:
-            import urllib.request
+            from huggingface_hub import hf_hub_download
             import zipfile
+            import shutil
             
-            status_text.text("Conectando con Hugging Face Datasets...")
+            status_text.text("Conectando y descargando base de datos (1.5 GB) con verificación de integridad desde Hugging Face...")
             
-            def download_progress(block_num, block_size, total_size):
-                if total_size > 0:
-                    percent = min(int(block_num * block_size * 100 / total_size), 100)
-                    progress_bar.progress(percent)
-                    status_text.text(f"Descargando base de datos: {percent}% ({block_num * block_size / (1024*1024):.1f} MB / {total_size / (1024*1024):.1f} MB)")
-            
-            # Descargar el zip
-            urllib.request.urlretrieve(url, zip_path, download_progress)
+            # Descargar usando hf_hub_download para asegurar 100% que el archivo no venga corrupto (valida SHA-256)
+            downloaded_zip = hf_hub_download(
+                repo_id="barrerafdo/seia-lancedb-dataset",
+                filename="lancedb_data.zip",
+                repo_type="dataset"
+            )
             
             status_text.text("Descomprimiendo base de datos vectorial...")
-            with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-                # El zip contiene 'seia_rag_deploy/scraper/lancedb_data'
-                # Necesitamos extraerlo al directorio padre de 'scraper'
-                parent_dir = Path(__file__).resolve().parent
+            
+            parent_dir = Path(__file__).resolve().parent
+            
+            with zipfile.ZipFile(downloaded_zip, 'r') as zip_ref:
                 zip_ref.extractall(parent_dir)
             
-            # Si se descomprimió como seia_rag_deploy/scraper/lancedb_data, moverlo a scraper/lancedb_data si es necesario
-            # Pero en la compresión usamos: zip -r seia_rag_deploy/lancedb_data.zip seia_rag_deploy/scraper/lancedb_data
-            # Así que al descomprimir en parent_dir, creará:
-            # parent_dir / seia_rag_deploy / scraper / lancedb_data
-            # Movámoslo al lugar correcto:
+            # El zip contiene 'seia_rag_deploy/scraper/lancedb_data'
             extracted_path = parent_dir / "seia_rag_deploy" / "scraper" / "lancedb_data"
             if extracted_path.exists():
-                import shutil
                 if db_dir.exists():
                     shutil.rmtree(db_dir)
                 shutil.move(str(extracted_path), str(db_dir))
-                # Limpiar la carpeta temporal creada por el zip
                 shutil.rmtree(parent_dir / "seia_rag_deploy")
             
-            if zip_path.exists():
-                zip_path.unlink()
-                
             status_text.text("¡Base de datos vectorial lista y cargada con éxito!")
-            progress_bar.empty()
             status_text.empty()
             st.success("¡Base de datos cargada correctamente! Recargando aplicación...")
             st.rerun()
