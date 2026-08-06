@@ -14,7 +14,7 @@ La aplicación está optimizada específicamente para auditar un portafolio de *
    El agente clasifica dinámicamente cada consulta en tres categorías:
    * **🔍 Específica:** Búsqueda dirigida a un expediente o megaproyecto particular utilizando índices de metadatos.
    * **📊 Global:** Consultas transversales (*spanning*) que requieren consolidar información agregada de todo el portafolio.
-   * **❌ Fuera de Tema:** Filtrado automático para resguardar la seguridad y costos del sistema.
+   * **❌ Preguntas Fuera de Tema (Out-of-Topic):** Detección y filtrado automático de consultas no relacionadas con el SEIA o minería para proteger el sistema ante abusos y optimizar costos de API.
 
 2. **Base de Datos Vectorial de Alto Rendimiento (LanceDB):**
    * Almacenamiento vectorial indexado con embeddings de OpenAI.
