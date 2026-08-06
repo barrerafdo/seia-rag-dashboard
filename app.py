@@ -403,14 +403,15 @@ st.markdown("""
         display: flex;
         align-items: stretch;
         justify-content: space-between;
-        gap: 6px;
+        gap: 8px;
+        flex-wrap: wrap;
     }
     .step-box {
         border: 1px solid #e5e7eb;
         border-radius: 10px;
         padding: 10px 12px;
         background: #f9fafb;
-        flex: 1;
+        flex: 1 1 180px;
         min-height: 90px;
         transition: all 0.2s ease;
     }
