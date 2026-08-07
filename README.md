@@ -31,6 +31,23 @@ La aplicación está optimizada específicamente para auditar un portafolio de *
 
 ---
 
+## 🗄️ Esquema de Datos y Metadatos (LanceDB)
+
+Cada fragmento de texto en la base de datos vectorial de LanceDB está estructurado con metadatos específicos que garantizan precisión y trazabilidad:
+
+* `proyecto`: Nombre oficial del megaproyecto minero.
+* `empresa`: Titular o compañía minera responsable de la faena.
+* `region`: Región de Chile donde se localiza el proyecto.
+* `estado`: Estado de la Calificación Ambiental en el SEIA (Aprobado, Rechazado, Desistido).
+* `numero_rca` / `fecha_rca`: Identificador único y fecha de emisión del permiso ambiental.
+* `archivo_origen` / `chunk_index`: Nombre del documento original (RCA, ICE, etc.) e índice del fragmento.
+
+### 💡 Utilización de Metadatos en el RAG
+1. **Contexto de Consulta Segura (Prompt Enrichment):** Anteponemos los metadatos como cabeceras a cada fragmento enviado al LLM, evitando la mezcla de datos o alucinaciones cruzadas entre proyectos.
+2. **Trazabilidad de Fuentes:** Los metadatos alimentan directamente las tarjetas de **Fuentes de Documentos Clave** que se muestran en el dashboard para validación del usuario.
+
+---
+
 ## 🛠️ Stack Tecnológico
 
 * ⚡ **Streamlit** — Frontend interactivo y diseño premium adaptado.

@@ -163,6 +163,17 @@
 * La **inversión promedio** de proyectos que contemplan **Plantas Desaladoras / Uso de Agua de Mar** es de **$1,245.56 MM USD** (frente a **$2,924.60 MM USD** de proyectos que no las contemplan).
 * La **vida útil promedio** de los proyectos que incorporan **Depósitos de Relaves** es de **24.9 años** (frente a **19.4 años** de los que no).
 
+**Listado de los 9 megaproyectos que incorporan Plantas Desaladoras o uso directo de Agua de Mar en el portafolio:**
+1. **Proyecto Santo Domingo** (Minera Santo Domingo SCM, Región de Atacama)
+2. **RT Sulfuros** (Codelco Chile División Radomiro Tomic, Región de Antofagasta)
+3. **Proyecto Minero Quebrada Blanca Fase 2** (Compañía Minera Teck Quebrada Blanca S.A., Región de Tarapacá)
+4. **Dominga** (Andes Iron SpA, Región de Coquimbo)
+5. **Infraestructura Complementaria - INCO** (Minera Los Pelambres, Región de Coquimbo)
+6. **Minerales Primarios Minera Spence** (Minera Spence S.A., Región de Antofagasta)
+7. **Desarrollo Minera Centinela** (Minera Centinela, Región de Antofagasta)
+8. **Candelaria 2030 - Continuidad Operacional** (Minera Candelaria, Región de Atacama)
+9. **Proyecto Cerro Blanco** (Compañía Minera Cerro Blanco, Región de Atacama)
+
 ---
 
 ## 🗺️ 9. Mapa Cruzado: Infraestructura Crítica por Región

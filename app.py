@@ -20,11 +20,15 @@ env_path = Path(__file__).resolve().parent / ".env"
 load_dotenv(dotenv_path=env_path, override=True)
 
 # Compatibilidad con Streamlit Cloud Secrets
-# Si no hay .env local (en la nube), inyectar la API Key desde st.secrets
-if not os.environ.get("OPENAI_API_KEY") and "OPENAI_API_KEY" in st.secrets:
-    os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
-if not os.environ.get("HF_TOKEN") and "HF_TOKEN" in st.secrets:
-    os.environ["HF_TOKEN"] = st.secrets["HF_TOKEN"]
+# Si no hay .env local (en la nube), intentar cargar desde st.secrets de forma segura
+try:
+    if not os.environ.get("OPENAI_API_KEY") and "OPENAI_API_KEY" in st.secrets:
+        os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+    if not os.environ.get("HF_TOKEN") and "HF_TOKEN" in st.secrets:
+        os.environ["HF_TOKEN"] = st.secrets["HF_TOKEN"]
+except Exception:
+    # Entorno local sin archivo secrets.toml, se ignoran los secretos de Streamlit
+    pass
 
 client = OpenAI()
 
@@ -107,8 +111,10 @@ personas = [
         "role": "Ingeniería ambiental",
         "preguntas": [
             {"q": "¿Qué planes de cierre y vida útil estimada se definieron para el proyecto El Espino?", "type": "🔍 Específica"},
-            {"q": "¿Cuáles son los principales motivos de rechazo ambiental identificados en el portafolio minero del SEIA?", "type": "📊 Global"},
-            {"q": "¿Cuáles son los compromisos y exigencias de monitoreo de calidad del agua para el proyecto Santo Domingo?", "type": "🔍 Específica"}
+            {"q": "¿Cuáles son los compromisos y exigencias de monitoreo de calidad del agua para el proyecto Santo Domingo?", "type": "🔍 Específica"},
+            {"q": "¿Qué variables metodológicas se utilizaron para medir el ruido en la fase de construcción de Blanco y Negro?", "type": "🔍 Específica"},
+            {"q": "¿Qué planes de monitoreo de fauna silvestre (especialmente aves) tiene el proyecto El Espino?", "type": "🔍 Específica"},
+            {"q": "¿Cuáles son los principales motivos de rechazo ambiental identificados en el portafolio minero del SEIA?", "type": "📊 Global"}
         ]
     },
     {
@@ -116,6 +122,8 @@ personas = [
         "avatar_symbol": "EM",
         "role": "Factibilidad",
         "preguntas": [
+            {"q": "¿Cómo se justificó la no afectación de glaciares en la evaluación de Los Bronces Integrado?", "type": "🔍 Específica"},
+            {"q": "¿Cuáles son los compromisos voluntarios asociados al monitoreo participativo en Salares Norte?", "type": "🔍 Específica"},
             {"q": "¿Cuáles son los proyectos mineros con mayor inversión aprobados en la Región de Atacama?", "type": "📊 Global"},
             {"q": "¿Cuánto es la inversión total del portafolio y qué proyectos contemplan una planta desaladora?", "type": "🧩 Compuesta"},
             {"q": "¿Qué proyectos de explotación de cobre lideran la inversión en la Región de Antofagasta?", "type": "🧩 Compuesta"}
@@ -126,6 +134,8 @@ personas = [
         "avatar_symbol": "AB",
         "role": "Litigación",
         "preguntas": [
+            {"q": "¿Cuáles fueron los fundamentos jurídicos del SEA para rechazar el proyecto Fénix Gold?", "type": "🔍 Específica"},
+            {"q": "¿Qué fallas procedimentales se reclamaron con mayor frecuencia en la reclamación de Dominga?", "type": "🔍 Específica"},
             {"q": "💸 ¿Qué proyectos del portafolio fueron calificados como Rechazados o Desistidos y bajo qué argumentos?", "type": "📊 Global"},
             {"q": "¿Qué proporción de proyectos del portafolio requirieron Consulta Indígena (Convenio 169)?", "type": "📊 Global"},
             {"q": "¿Qué comunas registran mayor concentración de proyectos y cuáles son sus titulares?", "type": "📊 Global"}
@@ -137,7 +147,8 @@ personas = [
         "role": "Incidencia",
         "preguntas": [
             {"q": "¿Cómo afecta la extracción hídrica a las comunidades del Salar de Atacama en los proyectos aprobados?", "type": "🔍 Específica"},
-            {"q": "¿Qué proyectos del portafolio han tenido exigencias de Consulta Indígena en la Región de Antofagasta?", "type": "🧩 Compuesta"}
+            {"q": "¿Qué proyectos del portafolio han tenido exigencias de Consulta Indígena en la Región de Antofagasta?", "type": "🧩 Compuesta"},
+            {"q": "¿Cuánto es la inversión de Santo Domingo y cuáles son sus compromisos de monitoreo de agua de mar?", "type": "🧩 Compuesta"}
         ]
     }
 ]
@@ -655,16 +666,40 @@ st.markdown("""
 st.markdown("""
 <div style="background:#ffffff; border:1px solid #e5e7eb; border-left:4px solid #2563eb; border-radius:12px; padding:14px 18px; margin-bottom:16px; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
   <p style="font-size:12px; font-weight:700; color:#111827; margin:0 0 6px 0;">¿Qué problema resuelve este sistema?</p>
-  <p style="font-size:11.5px; color:#374151; line-height:1.7; margin:0;">
-    El Sistema de Evaluación de Impacto Ambiental (SEIA) de Chile genera miles de documentos técnicos —RCAs, ICEs e ICSARAs— que son
-    <strong>prácticamente inaccesibles para búsqueda y análisis</strong> sin herramientas especializadas. Este sistema implementa un
-    <strong>agente RAG (Retrieval-Augmented Generation)</strong> sobre un portafolio de <strong>91 megaproyectos mineros</strong>,
-    permitiendo consultas en lenguaje natural con respuestas contextualizadas y con fuentes citadas.
-    El agente clasifica automáticamente cada pregunta —específica, global o compuesta— y enruta la consulta
-    al motor de recuperación adecuado para maximizar precisión y cobertura.
+  <p style="font-size:11.5px; color:#374151; line-height:1.7; margin:0 0 10px 0;">
+    El <b>SEIA</b> genera miles de documentos técnicos altamente complejos que son <strong>difíciles de auditar y analizar</strong> sin herramientas especializadas. 
+    Este sistema implementa un <strong>agente RAG (Retrieval-Augmented Generation)</strong> sobre un portafolio de <strong>91 megaproyectos mineros</strong>, 
+    permitiendo consultas libres en lenguaje natural con respuestas contextualizadas y fuentes citadas.
+    El agente clasifica y enruta automáticamente la consulta al motor de búsqueda adecuado para maximizar la exactitud.
+  </p>
+  <div style="background:#f8fafc; border-radius:8px; padding:8px 12px; border:0.5px solid #e2e8f0; display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:8px; margin-bottom:10px;">
+    <div style="font-size:10px; color:#475569;"><b style="color:#1e3a8a;">SEIA:</b> Sistema de Evaluación de Impacto Ambiental (regulador chileno).</div>
+    <div style="font-size:10px; color:#475569;"><b style="color:#1e3a8a;">RCA:</b> Resolución de Calificación Ambiental (permiso ambiental final).</div>
+    <div style="font-size:10px; color:#475569;"><b style="color:#1e3a8a;">ICE:</b> Informe Consolidado de Evaluación (estudio técnico de evaluación).</div>
+    <div style="font-size:10px; color:#475569;"><b style="color:#1e3a8a;">ICSARA:</b> Solicitud de Aclaraciones y Rectificaciones (observaciones de autoridades).</div>
+  </div>
+  <p style="font-size:10.5px; color:#4b5563; line-height:1.5; margin:0; padding-top:4px; border-top:1px dashed #e5e7eb;">
+    📅 <b>Alcance de los Datos:</b> Contiene un portafolio curado de <b>91 megaproyectos mineros</b> (inversiones &gt; $100M USD) evaluados por el SEIA desde su creación en <b>1997</b> hasta <b>Enero de 2024</b>. No incluye operaciones históricas pre-1997 (ej. división original El Salvador) ni faenas de menor escala.
   </p>
 </div>
 """, unsafe_allow_html=True)
+
+# ── Estructura de Metadatos (Expander colapsable) ──
+with st.expander("🗄️ Ver esquema de metadatos indexados en la base de datos (LanceDB)"):
+    st.markdown("""
+    <div style="font-size: 11.5px; color: #374151; line-height: 1.6;">
+      Cada uno de los miles de fragmentos de texto en la base de datos vectorial está enriquecido con metadatos estructurados para garantizar trazabilidad y precisión:
+      <ul style="margin-top: 6px; padding-left: 20px; margin-bottom: 8px;">
+        <li>📌 <b>proyecto:</b> Nombre oficial del megaproyecto minero.</li>
+        <li>🏢 <b>empresa:</b> Titular o compañía minera responsable de la faena.</li>
+        <li>📍 <b>region:</b> Región geográfica donde se localiza el proyecto.</li>
+        <li>⚖️ <b>estado:</b> Estado de la Calificación Ambiental en el SEIA (Aprobado, Rechazado, Desistido).</li>
+        <li>📝 <b>numero_rca / fecha_rca:</b> Identificador y fecha de emisión de la Resolución de Calificación Ambiental.</li>
+        <li>📂 <b>archivo_origen / chunk_index:</b> Nombre del documento original e índice de procedencia del fragmento.</li>
+      </ul>
+      <span style="color: #2563eb; font-weight: 600;">💡 ¿Cómo se usan?</span> Estos campos inyectan contexto estructurado en el prompt del LLM para evitar alusiones cruzadas entre proyectos y construyen de forma dinámica las tarjetas de <b>Fuentes de Documentos Clave</b> para auditoría humana.
+    </div>
+    """, unsafe_allow_html=True)
 
 # ── Definir Pestañas (Tabs) ──
 tab_demo, tab_eval = st.tabs(["Demo", "Evaluación"])
@@ -673,81 +708,48 @@ tab_demo, tab_eval = st.tabs(["Demo", "Evaluación"])
 # TAB 1: DEMO (Buscador Real)
 # ==============================================================================
 with tab_demo:
-    # Session State para controlar el usuario y pregunta elegida de forma reactiva
-    if "selected_persona_idx" not in st.session_state:
-        st.session_state.selected_persona_idx = 0
+    # Session State para controlar la pregunta elegida de forma reactiva
     if "current_question" not in st.session_state:
         st.session_state.current_question = "¿Qué planes de cierre y vida útil estimada se definieron para el proyecto El Espino?"
 
-    # 1. SECCIÓN: Perfiles de Usuario (Horizontal, 4 columnas)
-    st.markdown('<p style="font-size: 11px; color: #6b7280; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px;">1. Selecciona un Perfil de Usuario</p>', unsafe_allow_html=True)
-    st.markdown('<p style="font-size: 10px; color: #9ca3af; margin-top: 0px; margin-bottom: 8px;">(Filtra las preguntas de ejemplo recomendadas según su área de interés)</p>', unsafe_allow_html=True)
+    # 1. SECCIÓN: Preguntas de Ejemplo Consolidadas (Dropdown elegante y compacto)
+    st.markdown('<p style="font-size: 11px; color: #6b7280; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px;">1. Preguntas de Ejemplo Recomendadas</p>', unsafe_allow_html=True)
+    st.markdown('<p style="font-size: 10px; color: #9ca3af; margin-top: 0px; margin-bottom: 8px;">Elige una pregunta prediseñada para evaluar las distintas categorías del RAG Agent:</p>', unsafe_allow_html=True)
     
-    col_p1, col_p2, col_p3, col_p4 = st.columns(4)
-    cols_p = [col_p1, col_p2, col_p3, col_p4]
-    
-    for idx, p in enumerate(personas):
-        is_active = (st.session_state.selected_persona_idx == idx)
-        active_class = "persona-active" if is_active else ""
-        
-        # Asignar emoji representativo
-        if p["avatar_symbol"] == "CA":
-            avatar_display = "📊"
-        elif p["avatar_symbol"] == "EM":
-            avatar_display = "⛏️"
-        elif p["avatar_symbol"] == "AB":
-            avatar_display = "⚖️"
-        else:
-            avatar_display = "🌱"
+    # Preparar opciones planas
+    dropdown_options = []
+    default_index = 0
+    for idx_p, p in enumerate(personas):
+        for idx_q, q in enumerate(p["preguntas"]):
+            # Asignar emoji representativo por perfil
+            if p["avatar_symbol"] == "CA":
+                emoji = "📊"
+            elif p["avatar_symbol"] == "EM":
+                emoji = "⛏️"
+            elif p["avatar_symbol"] == "AB":
+                emoji = "⚖️"
+            else:
+                emoji = "🌱"
             
-        btn_label = f"{avatar_display}  {p['nombre']} — {p['role']}"
-        
-        with cols_p[idx]:
-            st.markdown(f'<div class="persona-btn-wrap {active_class}">', unsafe_allow_html=True)
-            if st.button(label=btn_label, key=f"btn_p_{idx}"):
-                st.session_state.selected_persona_idx = idx
-                st.session_state.current_question = p["preguntas"][0]["q"] # Cargar primera pregunta de ejemplo
-                st.rerun()
-            st.markdown('</div>', unsafe_allow_html=True)
-
-    # 2. SECCIÓN: Preguntas de Ejemplo (Horizontal, 3 columnas)
-    st.markdown('<p style="font-size: 11px; color: #6b7280; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 14px; margin-bottom: 8px;">2. Selecciona una Pregunta de Ejemplo</p>', unsafe_allow_html=True)
+            label = f"{emoji} [{p['nombre']}] — {q['q']}"
+            dropdown_options.append((label, q["q"]))
+            if q["q"] == st.session_state.current_question:
+                default_index = len(dropdown_options) - 1
+                
+    selected_label = st.selectbox(
+        label="Preguntas de ejemplo:",
+        options=[opt[0] for opt in dropdown_options],
+        index=default_index,
+        label_visibility="collapsed"
+    )
     
-    curr_persona = personas[st.session_state.selected_persona_idx]
-    col_q1, col_q2, col_q3 = st.columns(3)
-    cols_q = [col_q1, col_q2, col_q3]
-    
-    for idx_q, q_item in enumerate(curr_persona["preguntas"]):
-        q_text = q_item["q"]
-        q_type = q_item["type"]
-        is_q_active = (st.session_state.current_question == q_text)
-        q_active_class = "q-active" if is_q_active else ""
-        
-        # Mapear colores de badges para los tipos de preguntas
-        badge_styles = {
-            "🔍 Específica": ("#eff6ff", "#1e40af"),
-            "📊 Global": ("#f0fdf4", "#166534"),
-            "🧩 Compuesta": ("#f5f3ff", "#5b21b6")
-        }
-        bg, fg = badge_styles.get(q_type, ("#f3f4f6", "#1f2937"))
-        
-        with cols_q[idx_q]:
-            # 1. Parte Superior: Caja del Botón con la pregunta
-            st.markdown(f'<div class="q-btn-wrap {q_active_class}">', unsafe_allow_html=True)
-            if st.button(label=q_text, key=f"btn_q_{idx_q}"):
-                st.session_state.current_question = q_text
-                st.rerun()
-            st.markdown('</div>', unsafe_allow_html=True)
-            
-            # 2. Parte Inferior: Caja del Badge coordinada visualmente
-            badge_html = (
-                f'<div class="q-badge-wrap">'
-                f'<span style="font-size: 8px; font-weight: 700; background: {bg}; color: {fg}; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; display: inline-block;">{q_type}</span>'
-                f'</div>'
-            )
-            st.markdown(badge_html, unsafe_allow_html=True)
+    # Actualizar la pregunta seleccionada reactivamente
+    selected_q = next(opt[1] for opt in dropdown_options if opt[0] == selected_label)
+    if selected_q != st.session_state.current_question:
+        st.session_state.current_question = selected_q
+        st.rerun()
 
-    st.markdown('<p style="font-size: 10px; color: #3b82f6; font-weight: 600; margin-top: 10px; margin-bottom: 4px;">💡 También puedes escribir cualquier pregunta libre y personalizada en el campo de abajo — el agente la clasificará y responderá en tiempo real.</p>', unsafe_allow_html=True)
+    st.markdown('<p style="font-size: 10px; color: #3b82f6; font-weight: 600; margin-top: 8px; margin-bottom: 4px;">💡 También puedes escribir cualquier pregunta libre y personalizada en el campo de abajo — el agente la clasificará y responderá en tiempo real.</p>', unsafe_allow_html=True)
 
     # 3. SECCIÓN: Buscador e Interacción RAG
     st.markdown('<p style="font-size: 11px; color: #6b7280; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 10px; margin-bottom: 2px;">3. Ejecutar Consulta</p>', unsafe_allow_html=True)
@@ -818,17 +820,17 @@ with tab_demo:
                             for src in step["sources"]:
                                 chunk_preview_lines.append(f"{src['doc']} p.{src['seccion']} · sim {src['score']}")
                     
-                    # Si no hay fuentes vectoriales pero hubo una consulta global, agregar el reporte consolidado
+                    # Si no hay fuentes vectoriales pero hubo al menos una consulta global, agregar el reporte consolidado una sola vez
                     if not sources:
-                        for step in steps:
-                            if step.get("category") == "global":
-                                sources.append({
-                                    "doc": "Reporte Consolidado del Portafolio del SEIA",
-                                    "proyecto": "Multi-Proyecto (Análisis BI)",
-                                    "seccion": "Secciones 1-12",
-                                    "score": "N/A"
-                                })
-                                chunk_preview_lines.append("Reporte Consolidado del Portafolio · Secciones 1-12 · sim N/A")
+                        has_global = any(step.get("category") == "global" for step in steps)
+                        if has_global:
+                            sources.append({
+                                "doc": "Reporte Consolidado del Portafolio del SEIA",
+                                "proyecto": "Multi-Proyecto (Análisis BI)",
+                                "seccion": "Secciones 1-12",
+                                "score": "N/A"
+                            })
+                            chunk_preview_lines.append("Reporte Consolidado del Portafolio · Secciones 1-12 · sim N/A")
                                 
                     if chunk_preview_lines:
                         chunk_preview = "\n".join(chunk_preview_lines[:2])
@@ -862,21 +864,22 @@ with tab_demo:
             )
             
         with col_rag:
-            # Formatear lista de tarjetas de fuentes
             sources_html = ""
             if sources:
                 sources_html += '<div class="sources-section"><p class="sources-label">Fuentes de Documentos Clave</p><div class="source-cards">'
                 for s in sources:
                     sources_html += (
-                        '<div class="source-card">'
+                        '<div class="source-card" style="display:flex; flex-direction:column; gap:4px; align-items:stretch;">'
+                        '<div style="display:flex; justify-content:between; align-items:center; width:100%;">'
                         '<div style="display:flex; align-items:center; gap:7px;">'
                         '<span style="font-size:13px;">📄</span>'
                         '<div>'
-                        f'<p class="source-doc" style="margin:0;">{s["doc"]}</p>'
-                        f'<p style="font-size:9px; color:#888; margin:0;">{s["seccion"]} · {s["proyecto"]}</p>'
+                        f'<p class="source-doc" style="margin:0; font-weight:600; font-size:11px;">{s["doc"]}</p>'
+                        f'<p style="font-size:9.5px; color:#555; margin:0;">{s["seccion"]} · {s["proyecto"]}</p>'
                         '</div>'
                         '</div>'
-                        f'<span class="source-score">sim {s["score"]}</span>'
+                        f'<span class="source-score" style="margin-left:auto;">sim {s["score"]}</span>'
+                        '</div>'
                         '</div>'
                     )
                 sources_html += '</div></div>'
@@ -921,15 +924,15 @@ with tab_demo:
                 <div style="color:#bbb; font-size:11px; padding:0 4px;">→</div>
                 <div class="step-box active-step">
                     <p class="step-num">04</p>
-                    <p class="step-name">Retrieval (k=8)</p>
-                    <p class="step-detail">Búsqueda vectorial en LanceDB</p>
+                    <p class="step-name">Retrieval (k=8 / 25)</p>
+                    <p class="step-detail">Búsqueda vectorial adaptativa en LanceDB</p>
                     <div class="chunk-preview">{chunk_preview}</div>
                 </div>
                 <div style="color:#bbb; font-size:11px; padding:0 4px;">→</div>
                 <div class="step-box">
                     <p class="step-num">05</p>
                     <p class="step-name">LLM Reranker</p>
-                    <p class="step-detail">RankGPT selecciona top-4 útiles</p>
+                    <p class="step-detail">RankGPT selecciona top-4 / 10 útiles</p>
                 </div>
                 <div style="color:#bbb; font-size:11px; padding:0 4px;">→</div>
                 <div class="step-box">
@@ -1005,14 +1008,14 @@ with tab_demo:
                 <div style="color:#bbb; font-size:11px; padding:0 4px;">→</div>
                 <div class="step-box">
                     <p class="step-num">04</p>
-                    <p class="step-name">Retrieval (k=8)</p>
-                    <p class="step-detail">Búsqueda vectorial en LanceDB</p>
+                    <p class="step-name">Retrieval (k=8 / 25)</p>
+                    <p class="step-detail">Búsqueda vectorial adaptativa en LanceDB</p>
                 </div>
                 <div style="color:#bbb; font-size:11px; padding:0 4px;">→</div>
                 <div class="step-box">
                     <p class="step-num">05</p>
                     <p class="step-name">LLM Reranker</p>
-                    <p class="step-detail">RankGPT selecciona top-4 útiles</p>
+                    <p class="step-detail">RankGPT selecciona top-4 / 10 útiles</p>
                 </div>
                 <div style="color:#bbb; font-size:11px; padding:0 4px;">→</div>
                 <div class="step-box">
