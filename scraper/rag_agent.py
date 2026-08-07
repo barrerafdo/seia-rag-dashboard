@@ -123,8 +123,8 @@ PREGUNTA GLOBAL:
         # 2. Buscar en LanceDB con límites dinámicos según el tipo de consulta
         # Si pide listados ("cuáles proyectos", "qué plantas", etc.), ampliamos la cobertura
         is_list_query = any(word in query_text.lower() for word in ["proyectos", "cuáles", "cuales", "lista", "quiénes", "quienes", "todos", "todas", "qué desaladoras", "que desaladoras"])
-        limit_search = 25 if is_list_query else 8
-        limit_rerank = 10 if is_list_query else 4
+        limit_search = 25 if is_list_query else 15
+        limit_rerank = 10 if is_list_query else 6
 
         try:
             results = self.tbl.search(query_embedding).limit(limit_search).to_list()
@@ -140,7 +140,7 @@ PREGUNTA GLOBAL:
             # Bypasseamos el Reranker restrictivo para evitar pérdida de proyectos y tomamos los 12 mejores resultados directamente.
             selected_results = results[:12]
         else:
-            selected_results = results[:4] # Fallback por defecto (primeros 4)
+            selected_results = results[:6] # Fallback por defecto (primeros 6)
             if len(results) > 4:
                 rerank_prompt = f"Analiza los siguientes {len(results)} fragmentos recuperados para responder la pregunta: '{query_text}'.\n\n"
                 for idx, item in enumerate(results):
@@ -149,7 +149,7 @@ PREGUNTA GLOBAL:
                     
                 rerank_prompt += (
                     "Tu tarea es seleccionar los índices de los fragmentos que aporten información útil, directa y "
-                    "no redundante para responder la pregunta. Puedes seleccionar entre 2 y 4 fragmentos según sea necesario. "
+                    "no redundante para responder la pregunta. Puedes seleccionar entre 2 y 6 fragmentos según sea necesario. "
                     "Excluye los fragmentos redundantes o irrelevantes."
                 )
                 
@@ -168,10 +168,10 @@ PREGUNTA GLOBAL:
                         if 0 <= idx < len(results):
                             temp_results.append(results[idx])
                     if temp_results:
-                        selected_results = temp_results[:4]
+                        selected_results = temp_results[:6]
                 except Exception as e:
-                    print(f"Error en Reranker LLM dinámico: {e}. Usando top-4 por defecto.")
-                    selected_results = results[:4]
+                    print(f"Error en Reranker LLM dinámico: {e}. Usando top-6 por defecto.")
+                    selected_results = results[:6]
 
         # 4. Formatear fragmentos de contexto y extraer fuentes
         context_parts = []

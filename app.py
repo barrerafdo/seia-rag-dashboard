@@ -924,7 +924,7 @@ with tab_demo:
                 <div style="color:#bbb; font-size:11px; padding:0 4px;">→</div>
                 <div class="step-box active-step">
                     <p class="step-num">04</p>
-                    <p class="step-name">Retrieval (k=8 / 25)</p>
+                    <p class="step-name">Retrieval (k=15 / 25)</p>
                     <p class="step-detail">Búsqueda vectorial adaptativa en LanceDB</p>
                     <div class="chunk-preview">{chunk_preview}</div>
                 </div>
@@ -932,7 +932,7 @@ with tab_demo:
                 <div class="step-box">
                     <p class="step-num">05</p>
                     <p class="step-name">LLM Reranker</p>
-                    <p class="step-detail">RankGPT selecciona top-4 / 10 útiles</p>
+                    <p class="step-detail">RankGPT selecciona top-6 / 10 útiles</p>
                 </div>
                 <div style="color:#bbb; font-size:11px; padding:0 4px;">→</div>
                 <div class="step-box">
@@ -1015,7 +1015,7 @@ with tab_demo:
                 <div class="step-box">
                     <p class="step-num">05</p>
                     <p class="step-name">LLM Reranker</p>
-                    <p class="step-detail">RankGPT selecciona top-4 / 10 útiles</p>
+                    <p class="step-detail">RankGPT selecciona top-6 / 10 útiles</p>
                 </div>
                 <div style="color:#bbb; font-size:11px; padding:0 4px;">→</div>
                 <div class="step-box">
