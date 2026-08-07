@@ -867,21 +867,7 @@ with tab_demo:
             sources_html = ""
             if sources:
                 sources_html += '<div class="sources-section"><p class="sources-label">Fuentes de Documentos Clave</p><div class="source-cards">'
-                import urllib.parse
                 for s in sources:
-                    # Generar búsqueda en Google acotada al dominio del SEIA oficial de Chile
-                    proj_name = s["proyecto"]
-                    if proj_name == "Multi-Proyecto (Análisis BI)":
-                        seia_url = "https://seia.sea.gob.cl/busqueda/buscarProyecto.php"
-                        link_html = f'<a href="{seia_url}" target="_blank" style="font-size:9.5px; color:#2563eb; text-decoration:none; font-weight:700; display:inline-flex; align-items:center; gap:3px;">🔗 Ver Portal SEIA ↗</a>'
-                    else:
-                        search_term = proj_name.split(" - ")[0].split(" (")[0]
-                        # Búsqueda en Google para encontrar la ficha del proyecto en el SEIA
-                        google_query = f'site:seia.sea.gob.cl/expediente/ficha/fichaProyecto.php "{search_term}"'
-                        query_encoded = urllib.parse.quote(google_query)
-                        seia_url = f"https://www.google.com/search?q={query_encoded}"
-                        link_html = f'<a href="{seia_url}" target="_blank" style="font-size:9.5px; color:#2563eb; text-decoration:none; font-weight:700; display:inline-flex; align-items:center; gap:3px;">🔗 Ver Expediente SEIA ↗</a>'
-
                     sources_html += (
                         '<div class="source-card" style="display:flex; flex-direction:column; gap:4px; align-items:stretch;">'
                         '<div style="display:flex; justify-content:between; align-items:center; width:100%;">'
@@ -893,9 +879,6 @@ with tab_demo:
                         '</div>'
                         '</div>'
                         f'<span class="source-score" style="margin-left:auto;">sim {s["score"]}</span>'
-                        '</div>'
-                        f'<div style="border-top: 1px dashed #e2e8f0; padding-top: 3px; margin-top: 2px; display: flex; justify-content: flex-start;">'
-                        f'{link_html}'
                         '</div>'
                         '</div>'
                     )
