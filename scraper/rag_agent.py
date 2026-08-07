@@ -107,8 +107,8 @@ PREGUNTA GLOBAL:
 
     def execute_specific_query_with_sources(self, query_text: str) -> Tuple[str, List[Dict]]:
         """
-        Responde a una sub-consulta específica realizando búsqueda vectorial en LanceDB (k=8)
-        y aplicando un Rerank agéntico basado en LLM (RankGPT) para seleccionar los 4 mejores.
+        Responde a una sub-consulta específica realizando búsqueda vectorial en LanceDB (k=15)
+        y aplicando un Rerank agéntico basado en LLM (RankGPT) para seleccionar los 6 mejores.
         """
         # 1. Generar embedding de la sub-consulta
         try:
@@ -141,7 +141,7 @@ PREGUNTA GLOBAL:
             selected_results = results[:12]
         else:
             selected_results = results[:6] # Fallback por defecto (primeros 6)
-            if len(results) > 4:
+            if len(results) > 6:
                 rerank_prompt = f"Analiza los siguientes {len(results)} fragmentos recuperados para responder la pregunta: '{query_text}'.\n\n"
                 for idx, item in enumerate(results):
                     rerank_prompt += f"--- FRAGMENTO INDICE {idx} ---\n"
