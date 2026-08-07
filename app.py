@@ -772,6 +772,7 @@ with tab_demo:
 
 
     # Utilizar un st.form para evitar que se ejecute la búsqueda automáticamente en la primera carga
+    st.markdown("<p style='font-size:14.5px; color:#334155; margin-bottom:8px;'>💡 <b>Nota:</b> Puedes escribir y probar <b>cualquier pregunta que se te ocurra</b> sobre los expedientes ambientales, no estás limitado a las de ejemplo.</p>", unsafe_allow_html=True)
     with st.form("query_form", clear_on_submit=False):
         user_query = st.text_input(
             label="Escribe tu pregunta sobre el SEIA:",
